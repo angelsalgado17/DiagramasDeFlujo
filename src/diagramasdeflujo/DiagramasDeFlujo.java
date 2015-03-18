@@ -5,6 +5,14 @@
  */
 package diagramasdeflujo;
 
+import controlador.OyenteMenu;
+import controlador.OyentePanel;
+import javax.swing.JFrame;
+import modelos.Diagrama;
+import modelos.Inicio;
+import vista.PanelDiagrama;
+import vista.VentanaDiagramas;
+
 /**
  *
  * @author Manuel Angel Muñoz S
@@ -15,7 +23,25 @@ public class DiagramasDeFlujo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Diagrama diagrama= new Diagrama();
+        PanelDiagrama panel= new PanelDiagrama(diagrama);
+        //Inicio prueba= new Inicio(50,50);
+        //diagrama.add(prueba);
+        
+        OyentePanel oyente= new OyentePanel(diagrama, panel);
+        OyenteMenu oyenteM= new OyenteMenu(diagrama, panel);
+        
+        VentanaDiagramas ventana= new VentanaDiagramas("Diagramas de flujo");
+        
+        ventana.addEventos(oyenteM);
+        ventana.add(panel);
+        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ventana.setSize(800,700);
+        ventana.setLocation(10, 10);
+        ventana.setContentPane(panel);
+        ventana.setVisible(true);
+        
+        
     }
     
 }
