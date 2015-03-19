@@ -35,16 +35,18 @@ public class OyenteMenu implements ActionListener{
             Inicio comp= new Inicio(150,150);
             if(!diagrama.add(comp)){ // si no lo agrego correctamente porque ya habia un inicio...
                 System.out.println("Error");
-                //JOptionPane.showConfirmDialog(panel, "Ya hay un metodo inicio", "Error", JOptionPane.ERROR_MESSAGE);
                 JOptionPane.showMessageDialog(panel,"Ya hay un metodo inicio", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            panel.repaint();
-        }
-        if(accion.equals("Codigo")){
-            Codigo comp= new Codigo(150,150);
-            diagrama.add(comp);
-            panel.repaint();
-        }
+            
+        }else 
+            if(accion.equals("Codigo")){
+                Codigo comp= new Codigo(150,150);
+                diagrama.add(comp);
+            } else if(accion.equals("Lectura")){
+                Lectura comp= new Lectura(200,200);
+                diagrama.add(comp);
+            }
+        panel.repaint();
     }
     
 }

@@ -27,24 +27,24 @@ public class Inicio implements Componente {
     /**
      * La posicion en x del componente respecto al panel.
      */
-    int x=0;
+    private int x=0;
     /**
      * La posicion en y del componente respecto al panel.
      */
-    int y=0;
+    private int y=0;
     /**
      * El ancho del ovalo.
      */
-    int ancho;
+    private int ancho;
     /**
      * El alto del ovalo.
      */
-    int alto;
+    private int alto;
     /**
      * Contiene la direccion del siguiente componente, es decir, el que esta 
      * conectado abajo de el y que se ejecutaria despues de este componente.
     */
-    public Componente siguiente=null;
+    private Componente siguiente=null;
     private String codigoInterior;
     public Inicio(int x, int y){
         this.x=x;

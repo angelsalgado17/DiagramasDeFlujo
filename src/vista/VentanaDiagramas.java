@@ -28,6 +28,7 @@ public class VentanaDiagramas extends javax.swing.JFrame {
         
         inicio.addActionListener(o);
         codigo.addActionListener(o);
+        lectura.addActionListener(o);
         fin.addActionListener(o);
     }
     /**
@@ -45,6 +46,7 @@ public class VentanaDiagramas extends javax.swing.JFrame {
         insertar = new javax.swing.JMenu();
         inicio = new javax.swing.JMenuItem();
         codigo = new javax.swing.JMenuItem();
+        lectura = new javax.swing.JMenuItem();
         fin = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,6 +65,9 @@ public class VentanaDiagramas extends javax.swing.JFrame {
 
         codigo.setText("Codigo");
         insertar.add(codigo);
+
+        lectura.setText("Lectura");
+        insertar.add(lectura);
 
         fin.setText("Fin");
         insertar.add(fin);
@@ -116,6 +121,7 @@ public class VentanaDiagramas extends javax.swing.JFrame {
     private javax.swing.JMenuItem inicio;
     private javax.swing.JMenu insertar;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem lectura;
     private javax.swing.JMenuItem salir;
     // End of variables declaration//GEN-END:variables
 }

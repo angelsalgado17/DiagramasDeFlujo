@@ -69,13 +69,13 @@ public class OyentePanel extends MouseAdapter {
     public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
         if(selecciono){ //si va a arrastrar un elemento
-            System.out.println("Arrastrando... ");
+            //System.out.println("Arrastrando... ");
             Point act=e.getPoint();
             diagrama.trasladarSeleccionados(act.x - ux, act.y - uy);
             ux=act.x;
             uy=act.y;
         }else{ //si va a seleccionar varios elementos
-            System.out.println("Seleccionando");
+            //System.out.println("Seleccionando");
             p2=e.getPoint();
             //System.out.println("p2: " + p2);
             diagrama.seleccionar(p1, p2); 
@@ -90,9 +90,12 @@ public class OyentePanel extends MouseAdapter {
     public void mouseReleased(MouseEvent e) {
         super.mouseReleased(e); 
         p2=e.getPoint();
-        selecciono=diagrama.seleccionar(p1, p2);  //para verificar si se seleccionaron todos al final        
         
-        panel.setSeleccionado(false);
+        if(panel.isSeleccionado()){
+            selecciono=diagrama.seleccionar(p1, p2); //para verificar si se seleccionaron todos al final        
+            panel.setSeleccionado(false);
+        }
+        
         System.out.println("Solto");
         panel.repaint();
     }

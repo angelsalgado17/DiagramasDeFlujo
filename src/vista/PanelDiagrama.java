@@ -5,6 +5,7 @@
  */
 package vista;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -39,6 +40,7 @@ public class PanelDiagrama extends JPanel{
             minY=Math.min(p1.y, p2.y);
             maxX=Math.max(p1.x, p2.x);
             maxY=Math.max(p1.y, p2.y);
+            g.setColor(Color.BLACK);
             g.drawRect(minX, minY, maxX-minX, maxY-minY);
         }
     }

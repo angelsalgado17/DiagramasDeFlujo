@@ -8,8 +8,7 @@ package diagramasdeflujo;
 import controlador.OyenteMenu;
 import controlador.OyentePanel;
 import javax.swing.JFrame;
-import modelos.Diagrama;
-import modelos.Inicio;
+import modelos.*;
 import vista.PanelDiagrama;
 import vista.VentanaDiagramas;
 
@@ -27,6 +26,7 @@ public class DiagramasDeFlujo {
         PanelDiagrama panel= new PanelDiagrama(diagrama);
         //Inicio prueba= new Inicio(50,50);
         //diagrama.add(prueba);
+        Codigo c= new Codigo(0,0);
         
         OyentePanel oyente= new OyentePanel(diagrama, panel);
         OyenteMenu oyenteM= new OyenteMenu(diagrama, panel);

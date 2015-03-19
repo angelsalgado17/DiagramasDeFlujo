@@ -34,7 +34,10 @@ public interface Componente {
      * @param codigo 
      */
     public void setCodigoInterior(String codigo);
-    
+    /**
+     * Dibuja el componente en el entorno grafico.
+     * @param g 
+     */
     public void  dibujar(Graphics g);
     /**
      * Convierte el componente en su respectivo codigo en C. 
@@ -42,15 +45,32 @@ public interface Componente {
      */
     public String generarCodigo();
     /**
-     * 
+     * Retorna el componente que esta al final de la fila, osea el ultimo que 
+     * se ejecuta despues de este.
      * @return 
      */
     public Componente getComponenteFinal();
     @Override
     public String toString();
+    /**
+     * La posicion en x del componente respecto al panel.
+     * @return x
+     */
     public int getX();
+    /**
+     * La posicion en y del componente respecto al panel.
+     * @return y
+     */
     public int getY();
+    /**
+     * La posicion en x del componente respecto al panel.
+     * @param x 
+     */
     public void setX(int x);
+    /**
+     * La posicion en y del componente respecto al panel.
+     * @param y
+     */
     public void setY(int y);
     public Componente getSiguiente();
     public Componente getAnterior();

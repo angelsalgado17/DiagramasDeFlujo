@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package modelos;
 
 import java.awt.Color;
@@ -13,10 +9,9 @@ import java.awt.Point;
  *
  * @author Manuel Angel Muñoz S
  */
-public class Codigo implements Componente {
-
-    Conector abajo;
-    Conector arriba;
+public class Lectura implements Componente{
+    private Conector abajo;
+    private Conector arriba;
     /**
      * Color normal del rectangulo.
      */
@@ -43,6 +38,13 @@ public class Codigo implements Componente {
      */
     private int alto;
     /**
+     * Describe los pixeles de diferencia entre un rectangulo normal y el 
+     * romboide que se dibujara, entre mayor sea su valor mas inclinado 
+     * sera.
+     * 
+     */
+    private int inclinacion;
+    /**
      * Contiene la direccion del siguiente componente, es decir, el que esta 
      * conectado abajo de el y que se ejecutaria despues de este componente.
     */
@@ -54,36 +56,65 @@ public class Codigo implements Componente {
     private Componente anterior;
     
     private String codigoInterior;
-    public Codigo(int x, int y){
+
+    public Lectura(int x, int y){
         this.x=x;
         this.y=y;
-        color= Color.GREEN;
-        colorSeleccion=Color.BLUE;  
+        color=Color.YELLOW;
+        colorSeleccion=Color.BLUE;
         alto=80;
-        ancho=(int)(1.618*alto);
+        ancho=(int)(1.618*80);
         arriba= new Conector(ancho/2, -30, 5, Color.BLACK);
         abajo= new Conector(ancho/2, alto+30,5, Color.BLACK);
+        inclinacion=15;
     }
+    /**
+     * Aqui va lo que el usuario escribio como codigo, me imagino solamente una 
+     * lista de variables separadas por comas, que son las que se leeran.
+     * @return el codigo que el usuario escribio.
+     */
+    @Override
+    public String getCodigoInterior() {
+        return codigoInterior;
+    }
+    /**
+     * Aqui va lo que el usuario escribio como codigo, me imagino solamente una 
+     * lista de variables separadas por comas, que son las que se leeran.
+     * @param codigo El codigo a asignarle.
+     */
+    @Override
+    public void setCodigoInterior(String codigo) {
+        codigoInterior=codigo;
+    }
+    
     @Override
     public void dibujar(Graphics g) {
         arriba.dibujar(g, this);
         abajo.dibujar(g, this);
+        g.drawLine(x+arriba.x,y+ arriba.y, x+ancho/2, y);
+        g.drawLine(x+abajo.x, y+abajo.y, x+ancho/2, y+alto);
         if(selected)
             g.setColor(colorSeleccion);
         else g.setColor(color);
+        int px[]=new int[4];
+        int py[]=new int[4];
+        px[0]=x+inclinacion;
+        py[0]=y;
+        px[1]=x+ancho;
+        py[1]=y;
+        px[2]=x+ancho-inclinacion;
+        py[2]=y+alto;
+        px[3]=x;
+        py[3]=y+alto;
+        g.fillPolygon(px, py, 4);
         
-        g.fillRect(x, y, ancho, alto);
-        g.setColor(Color.BLACK);
-        g.drawString((codigoInterior==null)?"": codigoInterior, x, y);
-        g.drawLine(x+arriba.x, y+arriba.y, x+ancho/2, y);
-        g.drawLine(x+abajo.x, y+ abajo.y, x+ancho/2, y+alto);
     }
-
+    
     @Override
     public String generarCodigo() {
-        // aqui se va a hacer todo el parseo y ese pedo del JAVACC y asi
-        //por mientras supondre que el usuario ya metio el codigo en lenguaje C
-        return codigoInterior;
+        //aqui aun no se como cambiaremos de lista de variables a puros scanf leyento esas variables
+        //creo que hay que hacer un objeto variable, y guardarlo en el inicio o algo asi
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -147,7 +178,7 @@ public class Codigo implements Componente {
     }
 
     @Override
-    public boolean estaEnArea(Point a, Point b) { 
+    public boolean estaEnArea(Point a, Point b) {
         int minX,minY, maxX, maxY;
         minX=Math.min(a.x, b.x);
         minY=Math.min(a.y, b.y);
@@ -166,16 +197,6 @@ public class Codigo implements Componente {
     public void traslada(int dx, int dy) {
         x+=dx;
         y+=dy;
-    }
-
-    @Override
-    public String getCodigoInterior() {
-        return codigoInterior;
-    }
-
-    @Override
-    public void setCodigoInterior(String codigo) {
-        codigoInterior=codigo;
     }
     
 }
