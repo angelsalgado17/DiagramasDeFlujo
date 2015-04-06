@@ -45,6 +45,10 @@ public class OyenteMenu implements ActionListener{
             } else if(accion.equals("Lectura")){
                 Lectura comp= new Lectura(200,200);
                 diagrama.add(comp);
+            }else
+            if(accion.equals("Fin")){
+                Fin comp= new Fin(200,250);
+                diagrama.add(comp);
             }
         panel.repaint();
     }

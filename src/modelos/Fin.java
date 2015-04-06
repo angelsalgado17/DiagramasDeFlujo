@@ -13,8 +13,8 @@ import java.awt.Point;
  *
  * @author Manuel Angel Muñoz S
  */
-public class Inicio implements Componente {
-    Conector abajo;
+public class Fin implements Componente{
+    Conector arriba;
     /**
      * Color normal del ovalo.
      */
@@ -40,49 +40,49 @@ public class Inicio implements Componente {
      * El alto del ovalo.
      */
     private int alto;
-    /**
-     * Contiene la direccion del siguiente componente, es decir, el que esta 
-     * conectado abajo de el y que se ejecutaria despues de este componente.
-    */
-    private Componente siguiente=null;
+    
+    private Componente anterior=null;
     private String codigoInterior;
-    public Inicio(int x, int y){
+    public Fin(int x, int y){
         this.x=x;
         this.y=y;
-        color= Color.CYAN;
+        color=Color.CYAN;
         colorSeleccion=Color.BLUE;
         alto =80;
         ancho=(int)(alto*1.618);
-        abajo= new Conector(ancho/2,alto+30,5,Color.BLACK);
+        arriba= new Conector(ancho/2,-30,5,Color.BLACK);
     }
+    
+    @Override
+    public String getCodigoInterior() {
+        return codigoInterior;
+    }
+
+    @Override
+    public void setCodigoInterior(String codigo) {
+        codigoInterior=codigo;
+    }
+
     @Override
     public void dibujar(Graphics g) {
+        arriba.dibujar(g, this);
         if(selected)
             g.setColor(colorSeleccion);
         else g.setColor(color);
         g.fillOval(x, y, ancho, alto);
-        
         g.setColor(Color.BLACK);
-        g.drawString("Inicio", x+ancho/3, y+alto/2);
-        g.drawLine(x+ancho/2, y+alto, x+abajo.x, y+abajo.y);
-        abajo.dibujar(g, this);
+        g.drawLine(x+ancho/2, y, x+arriba.x, y+arriba.y);
+        g.drawString("Fin", x+ancho/3, y+alto/2);
     }
 
     @Override
     public String generarCodigo() {
-        return "#include<stdio.h>\n"
-                + codigoInterior //contendra las declaraciones de variables globales
-                + "\nint main(){\n";
+        return "return 0"; //aqui  
     }
 
     @Override
     public Componente getComponenteFinal() {
-        if(siguiente==null)return null;
-        Componente aux=siguiente;
-        while(aux.getSiguiente()!=null){
-            aux=aux.getSiguiente();
-        }
-        return aux;
+        return null;
     }
 
     @Override
@@ -107,37 +107,32 @@ public class Inicio implements Componente {
 
     @Override
     public Componente getSiguiente() {
-        return siguiente;
-    }
-
-    @Override
-    public Componente getAnterior() {
         return null;
     }
 
     @Override
+    public Componente getAnterior() {
+        return anterior;
+    }
+
+    @Override
     public void setSiguiente(Componente c) {
-        siguiente=c;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void setAnterior(Componente c) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        anterior=c;
     }
 
-    /**
-     * @return the selected
-     */
     @Override
     public boolean isSelected() {
         return selected;
     }
 
-    /**
-     * @param selected the selected to set
-     */
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    @Override
+    public void setSelected(boolean s) {
+        selected=s;
     }
 
     @Override
@@ -161,14 +156,5 @@ public class Inicio implements Componente {
         x+=dx;
         y+=dy;
     }
-
-    @Override
-    public String getCodigoInterior() {
-        return codigoInterior;
-    }
-
-    @Override
-    public void setCodigoInterior(String codigo) {
-        codigoInterior=codigo;
-    }
+    
 }

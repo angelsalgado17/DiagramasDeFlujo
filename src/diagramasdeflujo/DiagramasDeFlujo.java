@@ -8,6 +8,7 @@ package diagramasdeflujo;
 import controlador.OyenteMenu;
 import controlador.OyentePanel;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import modelos.*;
 import vista.PanelDiagrama;
 import vista.VentanaDiagramas;
@@ -26,7 +27,7 @@ public class DiagramasDeFlujo {
         PanelDiagrama panel= new PanelDiagrama(diagrama);
         //Inicio prueba= new Inicio(50,50);
         //diagrama.add(prueba);
-        Codigo c= new Codigo(0,0);
+        //Codigo c= new Codigo(0,0);
         
         OyentePanel oyente= new OyentePanel(diagrama, panel);
         OyenteMenu oyenteM= new OyenteMenu(diagrama, panel);
@@ -34,7 +35,12 @@ public class DiagramasDeFlujo {
         VentanaDiagramas ventana= new VentanaDiagramas("Diagramas de flujo");
         
         ventana.addEventos(oyenteM);
-        ventana.add(panel);
+        JScrollPane scroll= new JScrollPane(panel);
+        
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        
+        ventana.add(scroll);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setSize(800,700);
         ventana.setLocation(10, 10);

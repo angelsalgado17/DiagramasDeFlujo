@@ -16,13 +16,13 @@ public interface Componente {
     /**
      * Contiene la direccion del siguiente componente, es decir, el que esta 
      * conectado abajo de el y que se ejecutaria despues de este componente.
-    */
+    *
     public Componente siguiente=null;
     /**
      * Contiene la direccion del componente anterior, es decir, el que esta 
      * conectado arriba de este, y que se ejecuto justo antes que este.
-     */
-    public Componente anterior=null;
+     *
+    public Componente anterior=null;*/
     /**
      * Contiene el codigo que el usuario escribio.
      * el codigo depende de el tipo de componente que sea

@@ -28,6 +28,7 @@ public class PanelDiagrama extends JPanel{
     private boolean seleccionado;
     public PanelDiagrama(Diagrama d){
         diagrama=d;
+        
     }
     @Override
     public void paintComponent(Graphics g){
