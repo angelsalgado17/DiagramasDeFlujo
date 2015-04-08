@@ -50,6 +50,12 @@ public interface Componente {
      * @return 
      */
     public Componente getComponenteFinal();
+    /**
+     * Retorna el componente que esta hasta el principio de la cadena de 
+     * ejecucion, osea el primero que se ejecutaria.
+     * @return 
+     */
+    public Componente getComponentePrincipio();
     @Override
     public String toString();
     /**
@@ -80,4 +86,22 @@ public interface Componente {
     public void setSelected(boolean s);
     public boolean estaEnArea(Point a, Point b);
     public void traslada(int dx, int dy);
+    public Conector getArriba();
+    public Conector getAbajo();
+    /**
+     * Verifica si el componente que se le esta mandando esta intersectando el
+     * conector de abajo de este componente, i.e. el otro componente solicita 
+     * unirse a este por abajo.
+     * @param c
+     * @return 
+     */
+    public boolean intersectaConectorBajo(Componente c);
+    /**
+     * Alinea este componente y todos los siguientes con respecto al componente 
+     * que se le indica, de tal manera que el conector de arriba de este 
+     * componente queda exactamente arriba (o abajo) del conector de abajo del 
+     * componente indicado en el parametro.
+     * @param c El componente con el cual alinearse.
+     */
+    public void alineaCon(Componente c);
 }

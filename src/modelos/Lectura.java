@@ -89,8 +89,7 @@ public class Lectura implements Componente{
     
     @Override
     public void dibujar(Graphics g) {
-        arriba.dibujar(g, this);
-        abajo.dibujar(g, this);
+        g.setColor(Color.BLACK);
         g.drawLine(x+arriba.x,y+ arriba.y, x+ancho/2, y);
         g.drawLine(x+abajo.x, y+abajo.y, x+ancho/2, y+alto);
         if(selected)
@@ -107,7 +106,8 @@ public class Lectura implements Componente{
         px[3]=x;
         py[3]=y+alto;
         g.fillPolygon(px, py, 4);
-        
+        arriba.dibujar(g, this);
+        abajo.dibujar(g, this);
     }
     
     @Override
@@ -119,9 +119,10 @@ public class Lectura implements Componente{
 
     @Override
     public Componente getComponenteFinal() {
-        if(siguiente==null)return null;
+        if(siguiente==null)return this;
+        if(siguiente.isSelected()!=this.isSelected())return this;
         Componente aux=siguiente;
-        while(aux.getSiguiente()!=null){
+        while(aux.getSiguiente()!=null && aux.getSiguiente().isSelected()== this.isSelected()){  //buscara a los que esten en su mismo estado, si este componente esta seleccionado, buscara hasta encontrar uno no seleccionado 
             aux=aux.getSiguiente();
         }
         return aux;
@@ -198,5 +199,50 @@ public class Lectura implements Componente{
         x+=dx;
         y+=dy;
     }
-    
+
+    @Override
+    public Componente getComponentePrincipio() {
+        if(anterior==null)return this;
+        if(anterior.isSelected()!= this.isSelected())return this;
+        Componente aux=anterior;
+        while(aux.getAnterior()!=null && aux.getAnterior().isSelected()==this.isSelected()){ //buscara a los que esten en su mismo estado, si este componente esta seleccionado, buscara hasta encontrar uno no seleccionado 
+            aux=aux.getAnterior();
+        }
+        return aux;
+    }
+
+    @Override
+    public Conector getArriba() {
+        return arriba;
+    }
+
+    @Override
+    public Conector getAbajo() {
+        return abajo;
+    }
+
+    @Override
+    public boolean intersectaConectorBajo(Componente c) {
+        if(c.getArriba()==null)
+            return false;
+        int px, py;
+        px=(abajo.x+x) - (c.getArriba().x+ c.getX());
+        py=(abajo.y+y) - (c.getArriba().y+ c.getY());
+        if(Math.sqrt(px*px + py*py) < abajo.radio*2)return true;
+        //if(abajo.distance(c.getArriba()) < abajo.radio*2)return true;
+        //System.out.println("distancia entre puntos: " + abajo.distance(c.getArriba()) +" diametro: " + abajo.radio*2);
+        return false;
+    }
+
+    @Override
+    public void alineaCon(Componente c) {
+        int x,y;
+        x=c.getX() + c.getAbajo().x;
+        y=c.getY() + c.getAbajo().y;
+        this.x=  x - arriba.x;
+        this.y=  y - arriba.y;
+        if(siguiente!=null){
+            siguiente.alineaCon(this);
+        }
+    }
 }

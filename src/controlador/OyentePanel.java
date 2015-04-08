@@ -94,8 +94,17 @@ public class OyentePanel extends MouseAdapter {
         if(panel.isSeleccionado()){
             selecciono=diagrama.seleccionar(p1, p2); //para verificar si se seleccionaron todos al final        
             panel.setSeleccionado(false);
+        }else {//if(selecciono) //creo que este if es innecesario porque si no esta seleccionado el panel, hay algo seleccionado
+            System.out.println("Enlaza y reacomoda");
+            diagrama.enlazaComponentes();
+            diagrama.reacomoda();
+            //Point act=e.getPoint(); //hay que corregir el hecho de que si se 
+            //cambian de lugar algunos componentes al momento de reacomodarlos, 
+            //y terminan tocando a otros como para conectarse, esos componentes 
+            //no quedan debidamente enlazados, solo graficamente "conectados"
+            //diagrama.trasladarSeleccionados(act.x - ux, act.y - uy); 
+            
         }
-        
         System.out.println("Solto");
         panel.repaint();
     }

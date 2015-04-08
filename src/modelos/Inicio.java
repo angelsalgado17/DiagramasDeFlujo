@@ -77,9 +77,10 @@ public class Inicio implements Componente {
 
     @Override
     public Componente getComponenteFinal() {
-        if(siguiente==null)return null;
+        if(siguiente==null)return this;
+        if(siguiente.isSelected()!=this.isSelected())return this;
         Componente aux=siguiente;
-        while(aux.getSiguiente()!=null){
+        while(aux.getSiguiente()!=null && aux.getSiguiente().isSelected()== this.isSelected()){  //buscara a los que esten en su mismo estado, si este componente esta seleccionado, buscara hasta encontrar uno no seleccionado 
             aux=aux.getSiguiente();
         }
         return aux;
@@ -122,7 +123,7 @@ public class Inicio implements Componente {
 
     @Override
     public void setAnterior(Componente c) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //no hay anterior al inicio
     }
 
     /**
@@ -170,5 +171,37 @@ public class Inicio implements Componente {
     @Override
     public void setCodigoInterior(String codigo) {
         codigoInterior=codigo;
+    }
+
+    @Override
+    public Componente getComponentePrincipio() {
+        return this;
+    }
+
+    @Override
+    public Conector getArriba() {
+        return null;//el componente inicio no tiene conector de arriba
+    }
+
+    @Override
+    public Conector getAbajo() {
+        return abajo;
+    }
+
+    @Override
+    public boolean intersectaConectorBajo(Componente c) {
+        if(c.getArriba()==null)
+            return false;
+        int px, py;
+        px=(abajo.x+x) - (c.getArriba().x+ c.getX());
+        py=(abajo.y+y) - (c.getArriba().y+ c.getY());
+        if(Math.sqrt(px*px + py*py) < abajo.radio*2)return true;
+        //if(abajo.distance(c.getArriba()) < abajo.radio*2)return true;
+        //System.out.println("distancia entre puntos: " + abajo.distance(c.getArriba()) +" diametro: " + abajo.radio*2);
+        return false;
+    }
+    @Override
+    public void alineaCon(Componente c) {
+        //no se puede alinear con ninguno porque es el primero, los demas se alinean con el
     }
 }

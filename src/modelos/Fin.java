@@ -65,7 +65,6 @@ public class Fin implements Componente{
 
     @Override
     public void dibujar(Graphics g) {
-        arriba.dibujar(g, this);
         if(selected)
             g.setColor(colorSeleccion);
         else g.setColor(color);
@@ -73,6 +72,7 @@ public class Fin implements Componente{
         g.setColor(Color.BLACK);
         g.drawLine(x+ancho/2, y, x+arriba.x, y+arriba.y);
         g.drawString("Fin", x+ancho/3, y+alto/2);
+        arriba.dibujar(g, this);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class Fin implements Componente{
 
     @Override
     public Componente getComponenteFinal() {
-        return null;
+        return this;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class Fin implements Componente{
 
     @Override
     public void setSiguiente(Componente c) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //no hay siguiente despues del fin
     }
 
     @Override
@@ -156,5 +156,38 @@ public class Fin implements Componente{
         x+=dx;
         y+=dy;
     }
-    
+
+    @Override
+    public Componente getComponentePrincipio() { 
+        if(anterior==null)return this;
+        if(anterior.isSelected()!= this.isSelected())return this;
+        Componente aux=anterior;
+        while(aux.getAnterior()!=null && aux.getAnterior().isSelected()==this.isSelected()){ //buscara a los que esten en su mismo estado, si este componente esta seleccionado, buscara hasta encontrar uno no seleccionado 
+            aux=aux.getAnterior();
+        }
+        return aux;
+    }
+
+    @Override
+    public Conector getArriba() {
+        return arriba;
+    }
+
+    @Override
+    public Conector getAbajo() {
+        return null; //no hay conector de abajo
+    }
+
+    @Override
+    public boolean intersectaConectorBajo(Componente c) {
+        return false;
+    }
+    @Override
+    public void alineaCon(Componente c) {
+        int x,y;
+        x=c.getX() + c.getAbajo().x;
+        y=c.getY() + c.getAbajo().y;
+        this.x=  x - arriba.x;
+        this.y=  y - arriba.y;
+    }
 }
