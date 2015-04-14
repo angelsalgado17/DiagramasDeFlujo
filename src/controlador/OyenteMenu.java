@@ -48,7 +48,10 @@ public class OyenteMenu implements ActionListener{
             }else
             if(accion.equals("Fin")){
                 Fin comp= new Fin(200,250);
-                diagrama.add(comp);
+                if(!diagrama.add(comp)){ // si no lo agrego correctamente porque ya habia un inicio...
+                    System.out.println("Error");
+                    JOptionPane.showMessageDialog(panel,"Ya hay un metodo fin", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         panel.repaint();
     }

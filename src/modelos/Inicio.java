@@ -174,7 +174,7 @@ public class Inicio implements Componente {
     }
 
     @Override
-    public Componente getComponentePrincipio() {
+    public Componente getComponentePrincipio(boolean modo) {
         return this;
     }
 
@@ -203,5 +203,17 @@ public class Inicio implements Componente {
     @Override
     public void alineaCon(Componente c) {
         //no se puede alinear con ninguno porque es el primero, los demas se alinean con el
+    }
+
+    @Override
+    public int getAlto() {
+        return abajo.y;
+    }
+
+    @Override
+    public int getAncho() {
+        int a=(ancho>>1)<<16;
+        a|=ancho/2;
+        return a;
     }
 }

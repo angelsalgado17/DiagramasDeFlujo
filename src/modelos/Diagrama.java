@@ -26,6 +26,7 @@ public class Diagrama {
     private int paresAEnlazar;
     private Inicio compInicial;
     private Fin compFinal;
+    private Componente bufferBusqueda;
     public boolean haySeleccionado;
     public Diagrama(){
         componentes= new ArrayList<>();
@@ -99,12 +100,13 @@ public class Diagrama {
                 componente.getArriba().color=Color.BLACK;
         }
         paresAEnlazar=0;
-        Componente seleccionado, noSelec;
+        Componente seleccionado, noSelec, seleccionadof;
         for(int i=0;i<componentes.size();i++){
             if(!componentes.get(i).isSelected()){
                 continue;
             }
-            seleccionado=componentes.get(i).getComponentePrincipio(); //componentes seleccionados
+            seleccionado=componentes.get(i).getComponentePrincipio(true); //componentes seleccionados
+            seleccionadof=componentes.get(i).getComponenteFinal();
             //System.out.println("Seleccionado: " + seleccionado.getClass());
             if(seleccionado.getArriba()!=null)
                 seleccionado.getArriba().color=Color.BLACK;
@@ -130,34 +132,71 @@ public class Diagrama {
                         System.out.println("Despego componentes " + noSelec.getClass() + "  " + seleccionado.getClass());
                         noSelec.setSiguiente(null);
                         seleccionado.setAnterior(null);
-                    }
+                    }else
+                        if(noSelec instanceof ComponenteContenedor){
+                            ((ComponenteContenedor)noSelec).borra(seleccionado);
+                        }
                 }
-                //falla si cambio de lugar un componente que estaba arriba de otro y lo pongo atras de ese, espero que con esto ya no falle
-                if(seleccionado.intersectaConectorBajo(noSelec)){ //si un componente no seleccionado se intenta unir al componente seleccionado
-                    seleccionado.getAbajo().color= Color.GREEN;
+                //falla si cambio de lugar un componente que estaba arriba de otro y lo pongo atras de ese, espero que con esto ya no falle. ya no fallo
+                //cambiar el seleccionado por componente.get(i).getComponenteFinal()
+                if(seleccionadof.intersectaConectorBajo(noSelec)){ //si un componente no seleccionado se intenta unir al componente seleccionado
+                    seleccionadof.getAbajo().color= Color.GREEN;
                     noSelec.getArriba().color= Color.GREEN;
                     
-                    bufferParesAEnlazar[paresAEnlazar][0]=seleccionado;
+                    bufferParesAEnlazar[paresAEnlazar][0]=seleccionadof;
                     bufferParesAEnlazar[paresAEnlazar][1]=noSelec;
                     paresAEnlazar++;
                     if(paresAEnlazar==20)break; // el maximo es 20 a la vez
-                    System.out.println("se intersecto por conector de abajo" + paresAEnlazar +" "+seleccionado.getClass() + "  " + noSelec.getClass());
+                    System.out.println("se intersecto por conector de abajo" + paresAEnlazar +" "+seleccionadof.getClass() + "  " + noSelec.getClass());
                     break;
                     
-                }else if(seleccionado.getSiguiente()== noSelec){
-                    System.out.println("Despego componentes de abajo " + seleccionado.getClass() +"  "+ noSelec.getClass());
-                    seleccionado.setSiguiente(null);
-                    noSelec.setAnterior(null);
+                }else if(seleccionadof.getSiguiente()== noSelec){
+                    System.out.println("Despego componentes de abajo " + seleccionadof.getClass() +"  "+ noSelec.getClass());
+                    //if(seleccionado no esta en un contenedor)se desconectan, si esta en un contenedor,
+                    //y es el primero del contenedor, se remplaza inmediatamente( en el metodo borra de la clase ComponeteContenedor)
+                    //, si pertenece a los demas, se agrega al buffer para que el metodo enlazar de esta clase los conecte, 
+                    //porque ese no pregunta si en realidad estan conectados <-- esto no funcionara
+                    int r=estaEnContenedor(seleccionado);  //este si tiene que ser el primero
+                    if(r==2){ //no esta adentro del contenedor
+                        seleccionadof.setSiguiente(null);
+                        noSelec.setAnterior(null);
+                    }else if(r==1){ //esta adentro del contenedor y no es el primero
+                        seleccionadof.setSiguiente(null);//por el momento pondre esto, no se me ocurre otra cosa
+                        noSelec.setAnterior(null);
+                    }
                 }
                 
             }
         }
     }
-
+    /**
+     * Retorna 0 si el componente c esta en el contenedor y ademas es el primero
+     * retorna 1 si esta en el contenedor pero no es el primero y retorna
+     * 2 si no esta en el contenedor.
+     * @param c
+     * @return 
+     */
+    public int estaEnContenedor(Componente c){
+        int r;
+        for (Componente componente : componentes) {
+            if(c!=componente && componente instanceof ComponenteContenedor){
+                r=((ComponenteContenedor)componente).contieneComponente(c);
+                bufferBusqueda=componente;
+                if(r==0)return 0;
+                if(r==1)return 1;
+            }
+        }
+        return 2;
+    }
     public void enlazaComponentes() {
         for (int i = 0; i < paresAEnlazar; i++) {
             System.out.println("El siguiente del de arriba era " + bufferParesAEnlazar[i][0].getSiguiente());
             if(bufferParesAEnlazar[i][0].getSiguiente()== bufferParesAEnlazar[i][1]) continue; //si los componentes a enlazar ya estan enlazados entre ellos no hace nada, si no, los enlaza
+            if(bufferParesAEnlazar[i][0] instanceof ComponenteContenedor){
+                boolean cont=((ComponenteContenedor)bufferParesAEnlazar[i][0]).addComponente(bufferParesAEnlazar[i][1]);
+                if(cont)
+                    continue;
+            }
             if(bufferParesAEnlazar[i][0].getSiguiente()==null){
                 bufferParesAEnlazar[i][0].setSiguiente(bufferParesAEnlazar[i][1]);
                 if(bufferParesAEnlazar[i][1].getAnterior()==null)
@@ -200,9 +239,61 @@ public class Diagrama {
         }
     }
 
-    public void reacomoda() {
+    public void reacomoda() { //reacomodarlos se hara un desmadre si hay que acomodar contenedores adentro de contenedores, pues el primer contenedor tambien se tiene que actualizar D:
         for (int i = 0; i < paresAEnlazar; i++) {
-            bufferParesAEnlazar[i][1].alineaCon(bufferParesAEnlazar[i][0]);
+            Componente p= bufferParesAEnlazar[i][0].getComponentePrincipio(false);
+            if(p instanceof ComponenteContenedor){
+                ((ComponenteContenedor)p).actualizaConectores();
+                ((ComponenteContenedor)p).acomodaComponentesInt();
+            }
+            if(p.getSiguiente()!=null)p.getSiguiente().alineaCon(p);
+            /*if(bufferParesAEnlazar[i][0] instanceof ComponenteContenedor){
+                ComponenteContenedor aux= (ComponenteContenedor)bufferParesAEnlazar[i][0];
+                aux.actualizaConectores();
+                aux.acomodaComponentesInt();
+            }else {
+                int aux=estaEnContenedor(bufferParesAEnlazar[i][i]);
+                if(aux== 0 || aux==1){
+                    ((ComponenteContenedor)bufferBusqueda).actualizaConectores();
+                    ((ComponenteContenedor)bufferBusqueda).acomodaComponentesInt();
+                }else 
+                    bufferParesAEnlazar[i][1].alineaCon(bufferParesAEnlazar[i][0]); //hay un problema con los contenedores
+            }*/
+        }
+    }
+    /**
+     * Si se cambian de lugar algunos componentes al momento de reacomodarlos
+     * y terminan tocando a otros como para conectarse, esos componentes 
+     * no quedan debidamente enlazados, solo graficamente "conectados", este
+     * metodo corrige eso buscando los que no estan enlazados y verificados que
+     * efectivamente no esten conectados, y si lo estan, los enlaza
+     */
+    public void confirmaEnlazado() {
+        Componente noEnlazadosArriba[], noEnlazadosAbajo[];
+        noEnlazadosArriba= new Componente[20];
+        noEnlazadosAbajo = new Componente[20];
+        int arriba=0, abajo=0;
+        for (Componente componente : componentes) {
+            if(componente.getAnterior()==null){
+                noEnlazadosArriba[arriba]=componente;
+                arriba++;
+            }
+            if(componente.getSiguiente()==null){
+                noEnlazadosAbajo[abajo]=componente;
+                abajo++;
+            }
+        }
+        for (int i = 0; i < abajo; i++) {
+            for (int j = 0; j < arriba; j++) {
+                if(noEnlazadosArriba[j]!=null && noEnlazadosAbajo[i]!= 
+                        noEnlazadosArriba[j] && 
+                        noEnlazadosAbajo[i].intersectaConectorBajo(noEnlazadosArriba[j])){
+                    noEnlazadosAbajo[i].setSiguiente(noEnlazadosArriba[j]);
+                    noEnlazadosArriba[j].setAnterior(noEnlazadosAbajo[i]);
+                    noEnlazadosArriba[j]=null;
+                    break;
+                }
+            }
         }
     }
 }

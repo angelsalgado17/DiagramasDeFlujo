@@ -53,9 +53,13 @@ public interface Componente {
     /**
      * Retorna el componente que esta hasta el principio de la cadena de 
      * ejecucion, osea el primero que se ejecutaria.
+     * Si el modo es true entonces busca solo los componentes que estan en el 
+     * mismo estado que este, es decir, que estan seleccionados o no, y si es 
+     * falso busca el primero sin importar si esta seleccionado o no.
+     * @param modo
      * @return 
      */
-    public Componente getComponentePrincipio();
+    public Componente getComponentePrincipio(boolean modo);
     @Override
     public String toString();
     /**
@@ -104,4 +108,19 @@ public interface Componente {
      * @param c El componente con el cual alinearse.
      */
     public void alineaCon(Componente c);
+    /**
+     * Regresa la medida total desde el conector de arriba hasta el conector de 
+     * abajo
+     * @return El alto
+     */
+    public int getAlto();
+    /**
+     * Regresa la medida total desde el pixel mas a la izquierda hasta el pixel
+     * mas a la derecha.
+     * Los 16 bits mas significativos es el ancho desde en medio hasta la 
+     * izquierda, y los 16 bits menos significativos es el ancho de en medio 
+     * hasta la derecha.
+     * @return El ancho
+     */
+    public int getAncho();
 }

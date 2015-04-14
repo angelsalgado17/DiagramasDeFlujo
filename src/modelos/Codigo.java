@@ -180,15 +180,20 @@ public class Codigo implements Componente {
     }
 
     @Override
-    public Componente getComponentePrincipio() {
+    public Componente getComponentePrincipio(boolean modo) {
         if(anterior==null)return this;
-        if(anterior.isSelected()!= this.isSelected())return this;
         Componente aux=anterior;
-        while(aux.getAnterior()!=null && aux.getAnterior().isSelected()==this.isSelected()){ //buscara a los que esten en su mismo estado, si este componente esta seleccionado, buscara hasta encontrar uno no seleccionado 
-            aux=aux.getAnterior();
+        if(modo){
+            if(anterior.isSelected()!= this.isSelected())return this;
+            while(aux.getAnterior()!=null && aux.getAnterior().isSelected()==this.isSelected()){ //buscara a los que esten en su mismo estado, si este componente esta seleccionado, buscara hasta encontrar uno no seleccionado 
+                aux=aux.getAnterior();
+            }
+            return aux;
+        }
+        while(aux.getAnterior()!=null){ 
+                aux=aux.getAnterior();
         }
         return aux;
-        
     }
 
     @Override
@@ -223,5 +228,17 @@ public class Codigo implements Componente {
         if(siguiente!=null){
             siguiente.alineaCon(this);
         }
+    }
+
+    @Override
+    public int getAlto() {
+        return abajo.y - arriba.y;
+    }
+
+    @Override
+    public int getAncho() {
+        int a=(ancho>>1)<<16;
+        a|=ancho/2;
+        return a;
     }
 }
