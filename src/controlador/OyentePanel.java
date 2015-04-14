@@ -98,11 +98,12 @@ public class OyentePanel extends MouseAdapter {
             System.out.println("Enlaza y reacomoda");
             diagrama.enlazaComponentes();
             diagrama.reacomoda();
+            diagrama.confirmaEnlazado();
             //Point act=e.getPoint(); //hay que corregir el hecho de que si se 
             //cambian de lugar algunos componentes al momento de reacomodarlos, 
             //y terminan tocando a otros como para conectarse, esos componentes 
             //no quedan debidamente enlazados, solo graficamente "conectados"
-            //diagrama.trasladarSeleccionados(act.x - ux, act.y - uy); 
+            //diagrama.trasladarSeleccionados(act.x - ux, act.y - uy);
             
         }
         System.out.println("Solto");
