@@ -64,7 +64,7 @@ public abstract class ComponenteContenedor implements Componente {
         this.y=y;
         color= Color.MAGENTA;
         colorSeleccion=Color.BLUE;
-        alto=(int)(1.618*80);
+        alto=130;//(int)(1.618*80);
         ancho=alto;
         //arriba= new Conector(ancho/2, -30, 5, Color.BLACK);
         //abajo= new Conector(ancho/2, alto+30,5, Color.BLACK);
@@ -251,6 +251,9 @@ public abstract class ComponenteContenedor implements Componente {
                 if(aux!=null)aux.alineaCon(componentesInternos[i]);
             }
         }
+        if(siguiente!=null){
+            siguiente.alineaCon(this);
+        }
     }
     
     /**
@@ -339,7 +342,7 @@ public abstract class ComponenteContenedor implements Componente {
             if(c==componentesInternos[i]){
                 return 0; //es el primero del contenedor, se remplaza inmediatamente( en el metodo borra de la clase ComponeteContenedor)
             }else{
-                Componente aux=componentesInternos[i].getSiguiente();
+                Componente aux=componentesInternos[i];
                 while(aux!=null){
                     if(aux==c){
                         return 1;

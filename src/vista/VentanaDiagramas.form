@@ -36,6 +36,11 @@
                 <Property name="text" type="java.lang.String" value="Lectura"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="si">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Si"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="fin">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Fin"/>

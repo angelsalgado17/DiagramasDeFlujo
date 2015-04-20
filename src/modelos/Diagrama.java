@@ -127,7 +127,7 @@ public class Diagrama {
                     System.out.println("se intersecto " + paresAEnlazar +" "+noSelec.getClass() + "  " + seleccionado.getClass());
                     break;
                 }else {
-                    System.out.println("Componentes no relacionados: " + noSelec.getClass() + "  " + seleccionado.getClass());
+                    //System.out.println("Componentes no relacionados: " + noSelec.getClass() + "  " + seleccionado.getClass());
                     if(noSelec.getSiguiente() == seleccionado){ //probablemente no necesite esto: || (seleccionado.getAnterior()!= null && seleccionado.getAnterior()==noSelec)){  //es por si va a despegar un componente de otro, si no funciona lo cambio por el buffer
                         System.out.println("Despego componentes " + noSelec.getClass() + "  " + seleccionado.getClass());
                         noSelec.setSiguiente(null);
