@@ -44,10 +44,12 @@ public class Si extends ComponenteContenedor{
         g.fillPolygon(romboX, romboY, 4);
         g.setColor(Color.BLACK);
         
+        if(codigoInterior!=null)
+            g.drawString(codigoInterior, romboX[3]+10, romboY[3]+5);
         //conector si
         g.drawLine(romboX[2], romboY[2], x+conectoresInternos[0].x, y + conectoresInternos[0].y); //linea
         conectoresInternos[0].dibujar(g, this); //conector si
-        g.drawString("Si", x+conectoresInternos[0].x+20, y+conectoresInternos[0].y);
+        g.drawString("Si", x+conectoresInternos[0].x+10, y+conectoresInternos[0].y);
         Componente aux=null;
         int xIni=0, yIni=0;
         if(componentesInternos[0]!=null){
@@ -63,7 +65,7 @@ public class Si extends ComponenteContenedor{
         //conector no
         g.drawLine(romboX[1], romboY[1], x+conectoresInternos[1].x, y+ conectoresInternos[1].y); //rombo a conector no
         conectoresInternos[1].dibujar(g, this); //conector si
-        g.drawString("No", x+ conectoresInternos[1].x+20, y+conectoresInternos[1].y);
+        g.drawString("No", x+ conectoresInternos[1].x+10, y+conectoresInternos[1].y);
         if(componentesInternos[1]!=null){
             aux= componentesInternos[1].getComponenteFinal();
             xIni=aux.getX() + aux.getAbajo().x;
@@ -109,22 +111,79 @@ public class Si extends ComponenteContenedor{
     @Override
     public int getAlto() {
         int a= getAlturaComponentesInt();
-        return abajo.y=conectoresInternos[0].x + a +30 - arriba.y;
+        abajo.y=conectoresInternos[0].y + a +30;
+        return  abajo.y- arriba.y; //arriba.y es negativo, asi que si lo restamos es como sumarlo
     }
 
     @Override
     public int getAncho() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int anchoIzq=this.ancho/2; 
+        //int anchoDer=anchoIzq + 30 + 10 + 20;//30 del largo minimo de la linea, 10 de lo que movimos la palabra "si" o "no" y 20 de lo que mide la palabra 
+        int anchoDer=conectoresInternos[1].x  - anchoIzq + 10+20; //*-*
+        int si=anchoMaximoComp(componentesInternos[0]);
+        int no=anchoMaximoComp(componentesInternos[1]); //hay que sumarle la ventaja que tiene puesto que inicia desde el conector no, que esta mas a la derecha
+        int aux=0;
+        anchoIzq= Math.max(anchoIzq, si>>16);
+        //aux= si & (0x0000ffff); //lado derecho de los componentes de si
+        //aux+= (no & (0xffff0000))>>16; //lado izquierdo de los componentes de no
+        //aux+= no & (0x0000ffff); //el lado derecho de los componentes de no
+        aux+= (conectoresInternos[1].x -  anchoIzq) + (no & 0x0000ffff); //*-*
+        anchoDer= Math.max(anchoDer, aux);
+        
+        codigoInterior= anchoIzq + ","+anchoDer;//esto es solo para hacer pruebas
+        return (anchoIzq<<16) | anchoDer;
     }
-
+    /**
+     * Calcula el ancho maximo de los componentes hacia la izquierda y hacia la
+     * derecha, en los 16 bits mas significativos se guarda la medida maxima del
+     * ancho hacia la izquierda, y en los menos significativos que guarda el 
+     * ancho maximo de en medio hacia la derecha.
+     * @return El componente del que se empieza a medir el ancho maximo.
+     */
+    private int anchoMaximoComp(Componente c){
+        int anchoIzq=0, anchoDer=0;
+        int aux, aux2;
+        while(c!=null){
+            if(c instanceof ComponenteContenedor){
+                ((ComponenteContenedor)c).actualizaConectores(); //aqui la recursion 
+            }
+            aux=c.getAncho(); //para cuando le pregunta su ancho ya actualizo sus conectores
+            aux2= aux & 0x0000ffff;//ancho derecha
+            if(aux2>anchoDer){
+                anchoDer=aux2;
+            }
+            aux2= aux & 0xffff0000;
+            aux2= aux2>>16;
+            if(aux2>anchoIzq){
+                anchoIzq=aux2;
+            }
+            c=c.getSiguiente();
+        }
+        return (anchoIzq<<16) | anchoDer;
+    }
+    /**
+     * Se actualizan todos los componentes en cascada, y se va midiendo el ancho
+     * desde el mas interior o el mas anidado hasta el mas exterior.
+     */
     @Override
-    public void actualizaConectores() {
+    public void actualizaConectores() { //falta actualizar el otro
         int altoT=getAlturaComponentesInt();
         abajo.y=conectoresInternos[0].y + altoT +30;
         
+        int anchoDer=this.ancho + 30;//30 del largo minimo de la linea
+        int si=anchoMaximoComp(componentesInternos[0]);
+        int no=anchoMaximoComp(componentesInternos[1]);
+        int aux;
+        
+        aux= (si & (0x0000ffff)) +  this.ancho/2; //lado derecho de los componentes de si, mas la mitad del ancho (ya que empieza desde la mitad)
+        aux+= (no & (0xffff0000))>>16; //lado izquierdo de los componentes de no
+        //aux+= no & (0x0000ffff); //el lado derecho de los componentes de no //esto solo si se va a medir el ancho, no cuando se actualiza
+        anchoDer= Math.max(anchoDer, aux);
+        
+        conectoresInternos[1].x=anchoDer;
     }
     private int getAlturaComponentesInt(){
-        int altoT=0, aux=0;
+        int altoT=0, aux=conectoresInternos[1].y - conectoresInternos[0].y;
         Componente comp=componentesInternos[0];
         while(comp!=null){
             altoT+=comp.getAlto();

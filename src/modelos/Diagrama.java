@@ -261,6 +261,16 @@ public class Diagrama {
             }*/
         }
     }
+    public void reacomodaTodos(){ //esto me anima a hacer un atributo de banderas para no repetir tanto esto
+        for (Componente componente : componentes) {
+            Componente p= componente.getComponentePrincipio(false); //esto hara que se repitan muchas cosas
+            if(p instanceof ComponenteContenedor){
+                ((ComponenteContenedor)p).actualizaConectores();
+                ((ComponenteContenedor)p).acomodaComponentesInt();
+            }
+            if(p.getSiguiente()!=null)p.getSiguiente().alineaCon(p);
+        }
+    }
     /**
      * Si se cambian de lugar algunos componentes al momento de reacomodarlos
      * y terminan tocando a otros como para conectarse, esos componentes 
@@ -294,6 +304,11 @@ public class Diagrama {
                     break;
                 }
             }
+        }
+    }
+    public void seleccionaTodos(){
+        for (Componente componente : componentes) {
+            componente.setSelected(true);
         }
     }
 }

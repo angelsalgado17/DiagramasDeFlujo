@@ -187,7 +187,7 @@ public abstract class ComponenteContenedor implements Componente {
         y+=dy;
         // tambien hay que mover a los componentes que contiene
         for (int i = 0; i < componentesInternos.length; i++) {
-            if(componentesInternos[i]!=null){
+            if(componentesInternos[i]!=null && !componentesInternos[i].isSelected()){
                 componentesInternos[i].traslada(dx, dy);
             }
         }
@@ -246,8 +246,13 @@ public abstract class ComponenteContenedor implements Componente {
                 x= this.x + conectoresInternos[i].x;
                 componentesInternos[i].setX(x - componentesInternos[i].getArriba().x);
                 y= this.y + conectoresInternos[i].y;
-                componentesInternos[i].setY(y - componentesInternos[i].getArriba().x);
-                Componente aux= componentesInternos[i].getSiguiente();
+                componentesInternos[i].setY(y - componentesInternos[i].getArriba().y);
+                Componente aux= componentesInternos[i];//.getSiguiente();
+                if(aux instanceof ComponenteContenedor){
+                    ((ComponenteContenedor)aux).actualizaConectores();
+                    ((ComponenteContenedor)aux).acomodaComponentesInt();
+                }
+                aux=aux.getSiguiente();
                 if(aux!=null)aux.alineaCon(componentesInternos[i]);
             }
         }
@@ -318,8 +323,10 @@ public abstract class ComponenteContenedor implements Componente {
                     Componente fin= c.getComponenteFinal();
                     
                     if(fin!=null){
-                        fin.getSiguiente().setAnterior(this);
-                        componentesInternos[i]=fin.getSiguiente();
+                        Componente nuevoFin=fin.getSiguiente();
+                        if(nuevoFin!=null)
+                            nuevoFin.setAnterior(this);
+                        componentesInternos[i]=nuevoFin;
                     }else{
                         componentesInternos[i]=null;
                     }

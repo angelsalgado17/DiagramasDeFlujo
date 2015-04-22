@@ -55,6 +55,10 @@ public class OyenteMenu implements ActionListener {
         } else if (accion.equals("Si")){
             Si comp = new Si(400, 250);
             diagrama.add(comp);
+        } else if(accion.equals("Reacomoda")){
+            diagrama.reacomodaTodos();
+        } else if(accion.equals("Selecciona todos")){
+            diagrama.seleccionaTodos();
         }
         panel.repaint();
     }

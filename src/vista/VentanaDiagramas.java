@@ -31,6 +31,9 @@ public class VentanaDiagramas extends javax.swing.JFrame {
         lectura.addActionListener(o);
         si.addActionListener(o);
         fin.addActionListener(o);
+        //editar
+        reacomoda.addActionListener(o);
+        seleccionaTodos.addActionListener(o);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -41,6 +44,12 @@ public class VentanaDiagramas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuBar1 = new javax.swing.JMenuBar();
         archivo = new javax.swing.JMenu();
         salir = new javax.swing.JMenuItem();
@@ -50,6 +59,21 @@ public class VentanaDiagramas extends javax.swing.JFrame {
         lectura = new javax.swing.JMenuItem();
         si = new javax.swing.JMenuItem();
         fin = new javax.swing.JMenuItem();
+        editar = new javax.swing.JMenu();
+        reacomoda = new javax.swing.JMenuItem();
+        seleccionaTodos = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
+
+        jMenuItem2.setText("jMenuItem2");
+
+        jMenu1.setText("jMenu1");
+
+        jMenu2.setText("jMenu2");
+
+        jMenu3.setText("jMenu3");
+
+        jMenuItem3.setText("jMenuItem3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +102,16 @@ public class VentanaDiagramas extends javax.swing.JFrame {
         insertar.add(fin);
 
         jMenuBar1.add(insertar);
+
+        editar.setText("Editar");
+
+        reacomoda.setText("Reacomoda");
+        editar.add(reacomoda);
+
+        seleccionaTodos.setText("Selecciona todos");
+        editar.add(seleccionaTodos);
+
+        jMenuBar1.add(editar);
 
         setJMenuBar(jMenuBar1);
 
@@ -122,12 +156,21 @@ public class VentanaDiagramas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu archivo;
     private javax.swing.JMenuItem codigo;
+    private javax.swing.JMenu editar;
     private javax.swing.JMenuItem fin;
     private javax.swing.JMenuItem inicio;
     private javax.swing.JMenu insertar;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem lectura;
+    private javax.swing.JMenuItem reacomoda;
     private javax.swing.JMenuItem salir;
+    private javax.swing.JMenuItem seleccionaTodos;
     private javax.swing.JMenuItem si;
     // End of variables declaration//GEN-END:variables
 }
