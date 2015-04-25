@@ -7,7 +7,9 @@ package diagramasdeflujo;
 
 import controlador.OyenteMenu;
 import controlador.OyentePanel;
+import java.awt.Dimension;
 import javax.swing.JFrame;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import modelos.*;
 import vista.PanelDiagrama;
@@ -35,16 +37,21 @@ public class DiagramasDeFlujo {
         VentanaDiagramas ventana= new VentanaDiagramas("Diagramas de flujo");
         
         ventana.addEventos(oyenteM);
+        
+        panel.setPreferredSize(new Dimension(2000,3000));
         JScrollPane scroll= new JScrollPane(panel);
         
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        
-        ventana.add(scroll);
+        //JScrollBar barraH=scroll.getHorizontalScrollBar();
+        oyenteM.setScrollPane(scroll);
+        //System.out.println("maximo: "+ barraH.getMaximum() + " minimo: " + barraH.getMinimum() + " " + barraH.getValue());
+        //barraH.setValue(100);
+        ///ventana.add(scroll);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setSize(800,700);
         ventana.setLocation(10, 10);
-        ventana.setContentPane(panel);
+        ventana.setContentPane(scroll);
         ventana.setVisible(true);
         
         

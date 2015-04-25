@@ -97,14 +97,20 @@ public class Si extends ComponenteContenedor{
             }
         }
         aux= componentesInternos[1];
-        codigo.append("} else {");
+        
+        StringBuilder sino=new StringBuilder();
         while(aux!=null){
             linea=aux.generarCodigo();
             if(linea.length()>0){
-                codigo.append("\t").append(linea);
+                sino.append("\t").append(linea);
             }
         }
-        codigo.append("}\n");
+        if(sino.length()>0){
+            codigo.append("} else {\n");
+            codigo.append(sino);
+            codigo.append("}\n");
+        }else codigo.append("}\n");
+        
         return codigo.toString();
     }
 
@@ -130,7 +136,7 @@ public class Si extends ComponenteContenedor{
         aux+= (conectoresInternos[1].x -  anchoIzq) + (no & 0x0000ffff); //*-*
         anchoDer= Math.max(anchoDer, aux);
         
-        codigoInterior= anchoIzq + ","+anchoDer;//esto es solo para hacer pruebas
+        //codigoInterior= anchoIzq + ","+anchoDer;//esto es solo para hacer pruebas
         return (anchoIzq<<16) | anchoDer;
     }
     /**
